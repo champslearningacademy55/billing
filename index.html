@@ -144,8 +144,8 @@
   <div class="banner-inner">
 
     <div class="banner-logo-wrap">
-      <!-- Logo: loaded from localStorage, else inline SVG fallback -->
-      <img id="site-logo" class="banner-logo" src="" alt="CLA Logo" />
+      <!-- Logo: loaded from localStorage, else use the default image file -->
+      <img id="site-logo" class="banner-logo" src="logo.jpeg" alt="CLA Logo" />
       <button class="upload-logo-btn" onclick="document.getElementById('logoFileInput').click()" title="Upload your logo">✎</button>
       <input type="file" id="logoFileInput" accept="image/*" onchange="uploadLogo(this)" />
     </div>
@@ -391,12 +391,7 @@
 /* ─── LOGO MANAGEMENT ─────────────────────────────────── */
 const SVG_KEY   = 'cla_logo_b64';
 const LOGO_IDS  = ['site-logo', 'r-logo'];
-
-function getSVGDataURL() {
-  const svg  = document.getElementById('svg-logo-def');
-  const xml  = new XMLSerializer().serializeToString(svg);
-  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)));
-}
+const DEFAULT_LOGO_SRC = 'logo.jpeg';
 
 function applyLogo(src) {
   LOGO_IDS.forEach(id => { const el = document.getElementById(id); if(el) el.src = src; });
@@ -404,7 +399,7 @@ function applyLogo(src) {
 
 function initLogo() {
   const saved = localStorage.getItem(SVG_KEY);
-  applyLogo(saved || getSVGDataURL());
+  applyLogo(saved || DEFAULT_LOGO_SRC);
 }
 
 function uploadLogo(input) {
