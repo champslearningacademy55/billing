@@ -15,6 +15,22 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body.access-locked .site-header,
+    body.access-locked .page-wrap { display: none; }
+
+    .access-overlay {
+      position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: linear-gradient(135deg, rgba(8,15,42,.95), rgba(22,39,89,.95));
+    }
+    .access-card {
+      width: min(420px, 100%); background: #fff; border-radius: 16px; box-shadow: 0 16px 45px rgba(0,0,0,.25);
+      padding: 28px; text-align: center;
+    }
+    .access-card h2 { color: var(--navy); margin-bottom: 8px; font-size: 24px; }
+    .access-card p { color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+    .access-card input { margin-bottom: 12px; }
+    .access-message { font-size: 13px; margin-top: 10px; color: #b91c1c; min-height: 18px; }
+    .access-overlay.hidden { display: none; }
 
     /* ── HEADER ── */
     .site-header {
@@ -137,7 +153,17 @@
     #spinner p { color: var(--gold-lt); font-size: 14px; font-weight: 600; }
   </style>
 </head>
-<body>
+<body class="access-locked">
+
+<div id="accessOverlay" class="access-overlay">
+  <div class="access-card">
+    <h2>Protected Access</h2>
+    <p>Enter the password to open the billing page.</p>
+    <input type="password" id="accessPassword" placeholder="Password" />
+    <button class="btn btn-primary" onclick="checkPassword()">Unlock</button>
+    <p id="accessMessage" class="access-message">Contact the admin if you do not know the password.</p>
+  </div>
+</div>
 
 <!-- ═══════════ SITE HEADER ═══════════ -->
 <header class="site-header">
@@ -388,6 +414,30 @@
 </svg>
 
 <script>
+const ACCESS_PASSWORD = 'Champs@2026'; // Change this to your preferred password.
+
+function checkPassword() {
+  const passwordInput = document.getElementById('accessPassword');
+  const message = document.getElementById('accessMessage');
+  const overlay = document.getElementById('accessOverlay');
+
+  if (passwordInput.value === ACCESS_PASSWORD) {
+    document.body.classList.remove('access-locked');
+    overlay.classList.add('hidden');
+    message.textContent = '';
+  } else {
+    message.textContent = 'Incorrect password. Please try again.';
+    passwordInput.value = '';
+    passwordInput.focus();
+  }
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && document.body.classList.contains('access-locked')) {
+    checkPassword();
+  }
+});
+
 /* ─── LOGO MANAGEMENT ─────────────────────────────────── */
 const SVG_KEY   = 'cla_logo_b64';
 const LOGO_IDS  = ['site-logo', 'r-logo'];
@@ -419,6 +469,7 @@ function uploadLogo(input) {
 /* ─── INIT ────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
   initLogo();
+  document.getElementById('accessPassword').focus();
   const today = new Date();
   document.getElementById('receiptDate').value = today.toISOString().split('T')[0];
   const mm  = String(today.getMonth()+1).padStart(2,'0');
