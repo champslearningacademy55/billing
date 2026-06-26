@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <meta name="author" content="Chaitanya Jonnagaddala" />
+  <meta name="author-email" content="chaithu215@gmail.com" />
   <title>Champs Learning Academy – Fee Receipt</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -14,17 +16,18 @@
       --border: #dce3f0; --text: #1a2340; --muted: #6b7a99;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
     body.access-locked .site-header,
     body.access-locked .page-wrap { display: none; }
 
     .access-overlay {
       position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center;
       padding: 20px; background: linear-gradient(135deg, rgba(8,15,42,.95), rgba(22,39,89,.95));
+      min-height: 100svh; min-height: 100dvh;
     }
     .access-card {
       width: min(420px, 100%); background: #fff; border-radius: 16px; box-shadow: 0 16px 45px rgba(0,0,0,.25);
-      padding: 28px; text-align: center;
+      padding: 28px; text-align: center; margin: auto;
     }
     .access-card h2 { color: var(--navy); margin-bottom: 8px; font-size: 24px; }
     .access-card p { color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
@@ -69,7 +72,7 @@
     }
 
     /* ── LAYOUT ── */
-    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 26px 20px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 26px 20px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; overflow-x: hidden; }
     @media (max-width: 820px) { .page-wrap { grid-template-columns: 1fr; } }
 
     /* ── CARD ── */
@@ -79,12 +82,24 @@
 
     /* ── FORM ── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid > div { min-width: 0; overflow-wrap: anywhere; }
     .form-grid .full { grid-column: 1 / -1; }
-    @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .form-grid { grid-template-columns: 1fr; gap: 12px; }
+      .btn-row { flex-direction: column; }
+    }
+    @media (max-width: 820px) {
+      .page-wrap { padding: 16px 12px 40px; }
+      .card-body { padding: 18px; }
+    }
+    @media (max-width: 480px) {
+      label { font-size: 10px; }
+      input, select, textarea { font-size: 13px; padding: 8px 10px; }
+      input[type="date"], input[type="month"] { min-width: 0; width: 100%; font-size: 13px; }
     }
     label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; color: var(--text); background: #f8faff; transition: border .2s; outline: none; }
+    input, select, textarea { width: 100%; max-width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 7px; font-size: 14px; color: var(--text); background: #f8faff; transition: border .2s; outline: none; -webkit-appearance: none; appearance: none; }
+    input[type="date"], input[type="month"] { min-width: 0; width: 100%; box-sizing: border-box; }
     input:focus, select:focus, textarea:focus { border-color: var(--gold); background: #fff; }
     textarea { resize: vertical; min-height: 56px; }
 
